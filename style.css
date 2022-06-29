@@ -1,0 +1,11 @@
+button{
+    cursor: pointer;
+}
+.log-in-option:hover{
+    color: cadetblue;    
+    cursor: pointer;
+}
+.error-message{
+    color: red;
+    font-weight: bold;
+}

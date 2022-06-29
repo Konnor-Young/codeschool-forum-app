@@ -2,11 +2,32 @@
 <html lang="en">
 <head>
     <title>SE Forum App</title>
-    <!-- <link rel="stylesheet" href="style.css"> -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="app">
-
+        <div id="log-in-page" v-if="!logCookie">
+            <div id="new-user" v-if="newUser">
+                <h2>Welcome!</h2>
+                <h2>Create an Account</h2>
+                Full Name: <input v-model="fullname" type="text"> <br>
+                Username: <input v-model="username" type="text"> <br>
+                Password: <input v-model="password" type="password"> <br>
+                <button :disabled="!fullname || !username || !password" @click="newUserLogIn">Submit & Log In</button>
+                <p class="log-in-option" @click="newUser = false">Already Have an Account?</p>
+            </div>
+            <div id="log=in" v-else>
+                <h2>Welcome Back!</h2>
+                Username: <input v-model="username" type="text"> <br>
+                Password: <input v-model="password" type="password"> <br>
+                <button :disabled="!username || !password" @click="userLogIn">Log In</button>
+                <p class="log-in-option" @click="newUser = true">Create an Account</p>
+            </div>
+            <span class="error-message">{{ logMessage }}</span>
+        </div>
+        <div v-else>
+            YOU DID IT!
+        </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <script src="app.js"></script>
