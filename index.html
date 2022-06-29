@@ -17,7 +17,7 @@
                 <p class="log-in-option" @click="newUser = false">Already Have an Account?</p>
             </div>
             <div id="log=in" v-else>
-                <h2>Welcome Back!</h2>
+                <h2>Log In Here!</h2>
                 Username: <input v-model="username" type="text"> <br>
                 Password: <input v-model="password" type="password"> <br>
                 <button :disabled="!username || !password" @click="userLogIn">Log In</button>

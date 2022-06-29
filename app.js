@@ -18,7 +18,7 @@ var app = new Vue({
                 "username": this.username,
                 "password": this.password
             };
-            this.postNewUser(userlog);
+            this.postUser(userlog);
         },
         userLogIn: function () {
             let userlog = {
@@ -35,8 +35,8 @@ var app = new Vue({
             if (response.status == 200){
                 this.logCookie = true;
             }
-            console.log(response.status);
             let data = await response.json();
+            console.log(response.status);
             console.log(data);
         },
         postSession: async function (userinfo) {
@@ -48,9 +48,9 @@ var app = new Vue({
                 },
                 credentials: "include"
             });
-            let body = response.json();
-            console.log(body);
+            let body = await response.json();
             console.log(response.status);
+            console.log(body);
             if (response.status == 201){
                 this.username = '';
                 this.password = '';
@@ -61,7 +61,7 @@ var app = new Vue({
                 this.logMessage = `invalid: username or password incorrect`;
             }
         },
-        postNewUser: async function (userinfo) {
+        postUser: async function (userinfo) {
             let response = await fetch(`${URL}/user`, {
                 method: 'POST',
                 body: JSON.stringify(userinfo),
@@ -70,14 +70,13 @@ var app = new Vue({
                 },
                 credentials: "include"
             });
-            console.log(response.status);
             let data = await response.json();
+            console.log(response.status);
             if(response.status == 201){
-                let new_user = {
-                    "username": data.username,
-                    "password": data.password
-                };
-                this.postSession(new_user);
+                this.password = '';
+                this.fullname = '';
+                this.newUser = false;
+                console.log(data);
             }
         },
     },
