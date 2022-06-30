@@ -1,5 +1,46 @@
 const URL = `https://forum2022.codeschool.cloud`
 
+// GET thread : 'posts' (threads)
+// POST thread name | description | category : new thread
+// GET thread/thread_id : 'comments' (posts) -->websocket?
+// DELETE thread/thread_id : gone thread
+
+// POST post thread_id | body : new comment --> ???
+// DELETE thread/thread_id/post/post_id : gone comment --> ???
+
+                    // Vue.component ('name', {
+                    //     props: [],
+                    //     template: ``,
+                    //     data: function () {return {}},
+                    //     methods: {},
+                    // });
+Vue.component ('this-thread', {
+    props: {'thread': Object, 'gotothread': Function},
+    template: ` <div>
+                    <h1 @click="gotothread(thread)">Title: {{thread.name}}</h1>
+                    <h2>Category: {{thread.category}}</h2>
+                    <p>{{thread.description}}</p>
+                </div>`,
+})
+Vue.component ('single-thread', {
+    props: {'thread': Object, 'backtothreads': Function, 'addcomment': Function},
+    template: ` <div>
+                    <button @click="backtothreads">Back To Threads</button>
+                    <div>
+                        <h1>Title: {{thread.name}}</h1>
+                        <p>{{thread.description}}</p>
+                    </div>
+                    <div v-for="post in thread.posts">
+                        <h2>{{post.body}}</h2>
+                        <p>{{post.user.username}}</p>
+                        <button @click="addcomment">Comment</button>
+                    </div>
+                </div>`,
+    data: function () {
+        return {}
+    }
+})
+
 var app = new Vue({
     el: "#app",
     data: {
@@ -9,7 +50,11 @@ var app = new Vue({
         fullname: '',
 
         logCookie: false,
+        showPost: false,
         logMessage: '',
+
+        threadList: [],
+        currentThread: {},
     },
     methods: {
         newUserLogIn: function () {
@@ -27,6 +72,14 @@ var app = new Vue({
             };
             this.postSession(userlog);
         },
+        gotoThread: function (thisThread) {
+            this.showPost = true;
+            this.getThread(thisThread._id);
+        },
+        backtoThreads: function () {
+            this.showPost = false;
+            this.currentThread = {};
+        },
         getSession: async function () {
             let response = await fetch(`${URL}/session`, {
                 method: 'GET',
@@ -34,6 +87,7 @@ var app = new Vue({
             });
             if (response.status == 200){
                 this.logCookie = true;
+                this.getThreads();
             }
             let data = await response.json();
             console.log(response.status);
@@ -54,8 +108,8 @@ var app = new Vue({
             if (response.status == 201){
                 this.username = '';
                 this.password = '';
-                this.logCookie = true;
                 this.logMessage = '';
+                this.getSession();
             }else{
                 this.password = '';
                 this.logMessage = `invalid: username or password incorrect`;
@@ -78,6 +132,24 @@ var app = new Vue({
                 this.newUser = false;
                 console.log(data);
             }
+        },
+        getThreads: async function () {
+            let response = await fetch(`${URL}/thread`, {
+                method: 'GET',
+                credentials: 'include'
+            });
+            let data = await response.json();
+            console.log(response.status);
+            this.threadList = data;
+        },
+        getThread: async function (id) {
+            let response = await fetch(`${URL}/thread/${id}`, {
+                method: 'GET',
+                credentials: 'include'
+            });
+            let data = await response.json();
+            console.log(response.status);
+            this.currentThread = data;
         },
     },
     created: function () {

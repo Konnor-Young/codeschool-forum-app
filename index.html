@@ -25,8 +25,13 @@
             </div>
             <span class="error-message">{{ logMessage }}</span>
         </div>
-        <div v-else>
-            YOU DID IT!
+        <div v-if="logCookie && !showPost">
+            <div v-for="(thread, index) in threadList">
+                <this-thread :thread="thread" :gotothread="gotoThread"></this-thread><br>
+            </div>
+        </div>
+        <div v-if="logCookie && showPost">
+            <single-thread :thread="currentThread" :backtothreads="backtoThreads"></single-thread>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
