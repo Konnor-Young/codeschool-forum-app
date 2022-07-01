@@ -25,13 +25,17 @@
             </div>
             <span class="error-message">{{ logMessage }}</span>
         </div>
+        <div v-if="logCookie && !showPost && newPost">
+            <this-thread-input :addthread="addThread"></this-thread-input>
+        </div>
         <div v-if="logCookie && !showPost">
+            <button @click="newPost = true">Add Thread</button>
             <div v-for="(thread, index) in threadList">
-                <this-thread :thread="thread" :gotothread="gotoThread"></this-thread><br>
+                <this-thread :thread="thread" :gotothread="gotoThread" :removethis="removeThread"></this-thread><br>
             </div>
         </div>
-        <div v-if="logCookie && showPost">
-            <single-thread :thread="currentThread" :backtothreads="backtoThreads" :deletethis="removePost(currentThread, post)"></single-thread>
+        <div v-if="logCookie && showPost && !newPost">
+            <single-thread :thread="currentThread" :backtothreads="backtoThreads" :deletethis="removePost"></single-thread>
             <input v-model="postMessage" @keydown.enter="addPost(currentThread, postMessage)">
         </div>
     </div>

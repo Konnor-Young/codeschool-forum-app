@@ -1,12 +1,12 @@
 const URL = `https://forum2022.codeschool.cloud`
 
-// GET thread : 'posts' (threads)
+// GET thread : 'posts' (threads)*
 // POST thread name | description | category : new thread
-// GET thread/thread_id : 'comments' (posts) -->websocket?
-// DELETE thread/thread_id : gone thread
+// GET thread/thread_id : 'comments' (posts) -->websocket?*
+// DELETE thread/thread_id : gone thread*
 
-// POST post thread_id | body : new comment --> ???
-// DELETE thread/thread_id/post/post_id : gone comment --> ???
+// POST post thread_id | body : new comment --> ???*
+// DELETE thread/thread_id/post/post_id : gone comment --> ???*
 
                     // Vue.component ('name', {
                     //     props: [],
@@ -15,11 +15,12 @@ const URL = `https://forum2022.codeschool.cloud`
                     //     methods: {},
                     // });
 Vue.component ('this-thread', {
-    props: {'thread': Object, 'gotothread': Function},
+    props: {'thread': Object, 'gotothread': Function, 'removethis': Function},
     template: ` <div>
                     <h1 @click="gotothread(thread)">Title: {{thread.name}}</h1>
                     <h2>Category: {{thread.category}}</h2>
                     <p>{{thread.description}}</p>
+                    <button @click="removethis(thread)">Delete</button>
                 </div>`,
 })
 Vue.component ('single-thread', {
@@ -33,12 +34,28 @@ Vue.component ('single-thread', {
                     <div v-for="post in thread.posts">
                         <h2>{{post.body}}</h2>
                         <p>{{post.user.username}}</p>
-                        <button @click=deletethis(thread, post)>Remove</button>
+                        <button @click="deletethis(thread, post)">Remove</button>
                     </div>
                 </div>`,
     data: function () {
         return {}
     }
+})
+Vue.component ('this-thread-input', {
+    props: {addthread: Function},
+    template: `<div>
+                    <h1>What would you like to say?</h1>
+                    Title: <input type="text" v-model="newtitle">
+                    Category: <input type="text" v-model="newcategory">
+                    Description: <input type="text" v-model="newdescription">
+                    <button @click="addthread(newtitle, newcategory, newdescription)">Submit</button>
+                </div>`,
+    data: function (){
+        return{
+            newtitle: '',
+            newcategory: '',
+            newdescription: ''
+        }},
 })
 
 var app = new Vue({
@@ -51,6 +68,7 @@ var app = new Vue({
 
         logCookie: false,
         showPost: false,
+        newPost: false,
         logMessage: '',
 
         threadList: [],
@@ -90,10 +108,23 @@ var app = new Vue({
             this.postPost(newPost, id);
             this.postMessage = '';
         },
+        addThread: function (name, tag, body){
+            let newestThread = {
+                "name": name,
+                "category": tag,
+                "description": body
+            };
+            this.postThread(newestThread);
+            this.newPost = false;
+        },
         removePost: function (thisThread, thisPost) {
             let threadID = thisThread._id;
             let postID = thisPost._id;
             this.deletePost(threadID, postID);
+        },
+        removeThread: function (thisThread) {
+            let id = thisThread._id;
+            this.deleteThread(id);
         },
         getSession: async function () {
             let response = await fetch(`${URL}/session`, {
@@ -182,6 +213,22 @@ var app = new Vue({
                 this.getThread(id);
             }
         },
+        postThread: async function (thread) {
+            let response = await fetch(`${URL}/thread`, {
+                method: 'POST',
+                body: JSON.stringify(thread),
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                credentials: "include"
+            });
+            let data = await response.json();
+            console.log(response.status);
+            console.log(data);
+            if(response.status == 200){
+                this.getThreads();
+            }
+        },
         deletePost: async function (thread_id, post_id) {
             let response = await fetch(`${URL}/thread/${thread_id}/post/${post_id}`, {
                 method: 'DELETE',
@@ -192,6 +239,16 @@ var app = new Vue({
             console.log(data);
             this.getThread(thread_id);
         },
+        deleteThread: async function (id) {
+            let response = await fetch(`${URL}/thread/${id}`, {
+                method: 'DELETE',
+                credentials: 'include'
+            });
+            let data = await response.json();
+            console.log(response.status);
+            console.log(data);
+            this.getThreads();
+        }
     },
     created: function () {
         this.getSession();
