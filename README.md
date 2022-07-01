@@ -1,13 +1,15 @@
 # codeschool-forum-app
 
-## Day 1
-
 -> create authentication _client side_.
 -> several pages to take care of new users|returning users|logged in users
 --> _Vue_ app front end
 
-#### _*ToDo*_
-
 ->ENDPOINTS
-| GET thread | GET thread ID | POST thread | DELETE thread ID |
-| POST post | DELETE post thread thread_id post post_id |
+
+| GET thread : 'posts' (threads)
+| GET thread/thread_id : 'comments' (posts)
+| POST thread: thread name | description | category : new thread
+| DELETE thread/thread_id : gone thread
+
+| POST post: thread_id | body : new comment
+| DELETE thread/thread_id/post/post_id : gone comment

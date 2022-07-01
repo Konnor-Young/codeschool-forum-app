@@ -1,25 +1,19 @@
 const URL = `https://forum2022.codeschool.cloud`
 
-// GET thread : 'posts' (threads)*
-// POST thread name | description | category : new thread
-// GET thread/thread_id : 'comments' (posts) -->websocket?*
-// DELETE thread/thread_id : gone thread*
-
-// POST post thread_id | body : new comment --> ???*
-// DELETE thread/thread_id/post/post_id : gone comment --> ???*
-
                     // Vue.component ('name', {
                     //     props: [],
                     //     template: ``,
                     //     data: function () {return {}},
                     //     methods: {},
                     // });
+
 Vue.component ('this-thread', {
     props: {'thread': Object, 'gotothread': Function, 'removethis': Function},
-    template: ` <div>
-                    <h1 @click="gotothread(thread)">Title: {{thread.name}}</h1>
-                    <h2>Category: {{thread.category}}</h2>
-                    <p>{{thread.description}}</p>
+    template: ` <div class="thread-container">
+                    <div>
+                        <h1 @click="gotothread(thread)">Title: {{thread.name}}</h1>
+                        <p>{{thread.description}}</p>
+                    </div>
                     <button @click="removethis(thread)">Delete</button>
                 </div>`,
 })
@@ -148,9 +142,9 @@ var app = new Vue({
                 },
                 credentials: "include"
             });
-            let body = await response.json();
+            // let body = await response.json();
             console.log(response.status);
-            console.log(body);
+            // console.log(body);
             if (response.status == 201){
                 this.username = '';
                 this.password = '';
