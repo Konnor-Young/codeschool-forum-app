@@ -13,3 +13,7 @@
 
 | POST post: thread_id | body : new comment
 | DELETE thread/thread_id/post/post_id : gone comment
+
+-> create authentication _server side_.
+-> server `serves` front-end
+-->_Node_ app back end
