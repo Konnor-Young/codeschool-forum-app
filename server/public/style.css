@@ -1,0 +1,73 @@
+*{
+    margin: 0 auto;
+    box-sizing: border-box;
+    background-color: rgb(255, 242, 223);
+}
+#wrapper{
+    background-color: rgb(255, 242, 223);
+}
+header{
+    text-align: center;
+}
+header h1{
+    font-size: 50px;
+    margin: 10px;
+}
+#log-in-page{
+    width: 80%;
+    max-width: 1000px;
+    text-align: center;
+    background-color: blanchedalmond;
+}
+#log-in-page h2{
+    padding: 20px;
+    font-size: 40px;
+    background-color: blanchedalmond;
+}
+#log-in-page h3{
+    padding: 10px;
+    font-size: 20px;
+    background-color: blanchedalmond;
+}
+.log-in-container{
+    background-color: blanchedalmond;
+}
+.log-in-container input{
+    margin: 5px;
+    background-color: blanchedalmond;
+}
+.log-in-form{
+    background-color: blanchedalmond;
+}
+.log-in-option{
+    background-color: blanchedalmond;
+}
+
+.nav-div{
+    display: flex;
+}
+.nav-div h1{
+    margin: 0 auto;
+}
+.nav-div button {
+    margin: 20px;
+    position: fixed;
+    right: 0;
+}
+
+.thread-container{
+    display: flex;
+}
+
+button{
+    cursor: pointer;
+}
+.log-in-option:hover{
+    color: cadetblue;    
+    cursor: pointer;
+}
+.error-message{
+    color: red;
+    font-weight: bold;
+    background-color: blanchedalmond;
+}

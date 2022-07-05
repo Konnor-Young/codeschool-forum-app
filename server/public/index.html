@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>SE Forum App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<div id="wrapper">
+<header><h1>Forum App</h1></header>
+<body>
+    <div id="app">
+        <!-- log in pages -->
+        <div id="log-in-page" v-if="!logCookie">
+            <!-- create new user -->
+            <div class="log-in-form" v-if="newUser">
+                <h2>Welcome!</h2>
+                <h3>Create an Account</h3>
+                <div class="log-in-container">
+                    <input v-model="fullname" placeholder="Full Name" type="text"> <br>
+                    <input v-model="username" placeholder="Username" type="text"> <br>
+                    <input v-model="password" placeholder="Password" type="password"> <br>
+                </div>
+                <button :disabled="!fullname || !username || !password" @click="newUserLogIn">Submit & Log In</button>
+                <p class="log-in-option" @click="newUser = false">Already Have an Account?</p>
+            </div>
+            <!-- log in existing user -->
+            <div class="log-in-form" v-else>
+                <h2>Log In Here!</h2>
+                <div class="log-in-container">
+                    <input v-model="username" placeholder="Username" type="text"> <br>
+                    <input v-model="password" placeholder="Password" type="password"> <br>
+                </div>
+                <button :disabled="!username || !password" @click="userLogIn">Log In</button>
+                <p class="log-in-option" @click="newUser = true">Create an Account</p>
+            </div>
+            <span class="error-message">{{ logMessage }}</span>
+        </div>
+        <!-- view all threads -->
+        <div class="nav-div" v-if="logCookie && !showPost">
+            <button @click="newPost = true">Add Thread</button>
+            <div v-if="logCookie && !showPost && newPost">
+                <this-thread-input :addthread="addThread"></this-thread-input>
+            </div>
+        </div>
+        <div v-if="logCookie && !showPost">
+            <div v-for="(thread, index) in threadList">
+                <this-thread :thread="thread" :gotothread="gotoThread" :removethis="removeThread"></this-thread><br>
+            </div>
+        </div>
+        <!-- view single thread + posts -->
+        <div v-if="logCookie && showPost && !newPost">
+            <single-thread :thread="currentThread" :backtothreads="backtoThreads" :deletethis="removePost"></single-thread>
+            <input v-model="postMessage" @keydown.enter="addPost(currentThread, postMessage)">
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="app.js"></script>
+</body>
+</div>
+</html>
