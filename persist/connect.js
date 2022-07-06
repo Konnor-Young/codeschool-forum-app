@@ -8,7 +8,7 @@ async function connect(user, pass, host, port, db_name) {
     try {
         await mongoose.connect(
             connectionString, {
-                useNewURlParser: true,
+                useNewURlParser: true, 
                 useUnifiedTopology: true
         });
     }
