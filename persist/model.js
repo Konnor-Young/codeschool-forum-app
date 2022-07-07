@@ -1,6 +1,24 @@
 const mongoose = require(`mongoose`);
 
-const userSchema = mongoose.Schema({
+const postSchema = mongoose.Schema(
+    {
+    user_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+    },
+    body: {type: String, required: true, default: ''},
+    thread_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Thread",
+        required: true,
+    },
+    },
+    { timestamps: true }
+);
+
+const userSchema = mongoose.Schema(
+    {
     username: {
         type: String,
         required: true, 
@@ -11,9 +29,11 @@ const userSchema = mongoose.Schema({
         ]},
     fullname: {type: String, required: true},
     password: {type: String, required: true},
-});
+    }
+);
 
-const threadSchema = mongoose.Schema({
+const threadSchema = mongoose.Schema(
+    {
     user_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
@@ -21,16 +41,15 @@ const threadSchema = mongoose.Schema({
     },
     name: {type: String, required: true, default: ""},
     description: {type: String, required: true, default: ""},
-    // posts: {type: [postSchema], required: true, default: ""},
+    posts: {type: [postSchema], required: false, default: []},
     category: {type: String, required: true, default: ""},
-},
-{
-    timestamps: true,
-}
+    },
+    { timestamps: true, }
 );
 
 const User = mongoose.model("User", userSchema);
 const Thread = mongoose.model("Thread", threadSchema);
+// const Post = mongoose.model("Post", postSchema);
 
 module.exports = {
     User: User,
